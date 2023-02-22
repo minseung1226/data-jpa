@@ -71,4 +71,42 @@ class MemberJpaRepositoryTest {
         assertThat(members.size()).isEqualTo(1);
     }
 
+    @Test
+    void paging(){
+        Member member1 = new Member("member1", 10);
+        Member member2 = new Member("member2", 10);
+        Member member3 = new Member("member3", 10);
+        Member member4 = new Member("member4", 10);
+        Member member5 = new Member("member5", 10);
+
+        memberJpaRepository.save(member1);
+        memberJpaRepository.save(member2);
+        memberJpaRepository.save(member3);
+        memberJpaRepository.save(member4);
+        memberJpaRepository.save(member5);
+
+        int age=10;
+        int offset=0;
+        int limit=3;
+
+        List<Member> members = memberJpaRepository.findByName(age, offset, limit);
+        long totalCount = memberJpaRepository.totalCount(age);
+
+        assertThat(members.size()).isEqualTo(3);
+        assertThat(totalCount).isEqualTo(5);
+    }
+
+
+    @Test
+    void bulkUpdate(){
+        Member member1 = new Member("member1", 10);
+        Member member2 = new Member("member2", 19);
+        Member member3 = new Member("member3", 20);
+        Member member4 = new Member("member4", 21);
+        Member member5 = new Member("member5", 40);
+
+        int resultCount = memberJpaRepository.bulkAgePlus(20);
+
+        assertThat(resultCount).isEqualTo(3);
+    }
 }
