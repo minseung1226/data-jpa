@@ -302,4 +302,9 @@ class MemberRepositoryTest {
 
     }
 
+    @Test
+    void callCustom(){
+        memberRepository.findMemberCustom();
+    }
+
 }

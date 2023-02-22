@@ -4,10 +4,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import study.datajpa.entity.repository.MemberRepository;
 
 import javax.persistence.EntityManager;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
@@ -16,6 +18,9 @@ class MemberTest {
 
     @Autowired
     EntityManager em;
+
+    @Autowired
+    MemberRepository memberRepository;
 
     @Test
     void testEntity(){
@@ -44,6 +49,26 @@ class MemberTest {
             System.out.println("member.team="+member.getTeam());
         }
 
+    }
+
+
+    @Test
+    void JpaBaseEntityTest() throws InterruptedException {
+        Member member1 = new Member("member1");
+        memberRepository.save(member1);
+
+        Thread.sleep(2000);
+        member1.setUsername("member2");
+
+        em.flush();
+        em.clear();
+
+        Optional<Member> findMember = memberRepository.findById(member1.getId());
+
+        System.out.println("createDate="+findMember.get().getCreatedDate());
+        System.out.println("updateDate="+findMember.get().getLastModifyDate());
+        System.out.println("createdBy="+findMember.get().getCreatedBy());
+        System.out.println("updatedBy="+findMember.get().getLastModifyBy());
     }
 
 }
